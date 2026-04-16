@@ -50,6 +50,16 @@ app.get("/jobs/:id", async(req, res) => {
 app.post("/jobs", async(req, res) => {
     const { companyname, jobtitle, joblocation, startdate, enddate, description } = req.body;
 
+    const dateFormat = /^\d{4}-\d{2}-\d{2}$/;
+
+    if(!dateFormat.test(startdate)) {
+        return res.status(400).json({ messsage: "Felaktig datumformat, använd: YYYY-MM-DD" });
+    }
+
+    if(enddate && !dateFormat.test(enddate)) {
+        return res.status(400).json({ messsage: "Felaktig datumformat, använd: YYYY-MM-DD" });
+    }
+
     if(!companyname || !jobtitle || !joblocation || !startdate) {
         return res.status(400).json({ messsage: "Företagsnamnn, jobbtitel, plats samt  anställnings startdatum krävs" })
     }
