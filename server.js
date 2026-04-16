@@ -95,8 +95,24 @@ app.put("/jobs/:id", async(req, res) => {
         console.error("Något gick fel:", error);
         res.status(500).send("Internt serverfel");
     }
+});
 
+// Routing - radera jobb
+app.delete("/jobs/:id", async(req, res) => {
+    const jobId = req.params.id;
 
+    try {
+        const job = await client.execute({
+            sql: "DELETE FROM workexperience WHERE id = :id",
+            args: {id: jobId}
+        });
+
+        res.status(201).json({ messsage: "Raderad" });
+
+    } catch(error) {
+        console.error("Något gick fel:", error);
+        res.status(500).send("Internt serverfel");
+    }
 });
 
 
