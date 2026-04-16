@@ -40,9 +40,9 @@ app.get("/jobs/:id", async(req, res) => {
         if(!job) return res.status(404).json({ error: "Inget jobb hittades" });
         res.json(job.rows);
 
-    } catch (e) {
+    } catch (error) {
         console.error("Något gick fel:", e);
-         res.status(500).send("Internt serverfel");
+        res.status(500).send("Internt serverfel");
     }
 });
 
@@ -64,6 +64,39 @@ app.post("/jobs", async(req, res) => {
         console.error("Åtgärd misslyckaded:", error);
         res.status(500).json({ message: "Kunde inte lägga till tjänst" });
     }
+});
+
+// Routing - ändra jobb
+app.put("/jobs/:id", async(req, res) => {
+    const { companyname, jobtitle, joblocation, startdate, enddate, description } = req.body;
+    const jobId = req.params.id;
+
+    if(!companyname || !jobtitle || !joblocation || !startdate) {
+        return res.status(400).json({ messsage: "Företagsnamnn, jobbtitel, plats samt  anställnings startdatum krävs" })
+    }
+
+    try {
+        const job = await client.execute({
+            sql: "UPDATE workexperience SET companyname = :companyname, jobtitle = :jobtitle, joblocation = :joblocation, startdate = :startdate, enddate = :enddate, description = :description WHERE id = :id",
+            args: { 
+                companyname: companyname, 
+                jobtitle: jobtitle, 
+                joblocation: joblocation, 
+                startdate: startdate, 
+                enddate: enddate, 
+                description: description,
+                id: jobId 
+            }
+        });
+
+    res.status(201).json({ id: job.lastInsertRowid?.toString(), ...req.body });
+
+    } catch(error) {
+        console.error("Något gick fel:", error);
+        res.status(500).send("Internt serverfel");
+    }
+
+
 });
 
 
