@@ -32,7 +32,6 @@ app.get("/jobs", async(req, res) => {
 app.get("/jobs/:id", async(req, res) => {
     try {
         const jobId = req.params.id;
-        const test = "";
 
         const job = await client.execute({
             sql: "SELECT * FROM workexperience WHERE id = :id",
