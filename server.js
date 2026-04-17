@@ -17,6 +17,12 @@ const client = createClient({
 app.use(cors()); // Tillåter cross-origin
 app.use(express.json()); //Parsa JSON-body
 
+// Routing - Startsida
+
+app.get("/", (req, res) => {
+   
+});
+
 // Routing - lista alla jobb
 app.get("/jobs", async(req, res) => {
     try {
