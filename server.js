@@ -20,7 +20,7 @@ app.use(express.json()); //Parsa JSON-body
 // Routing - Startsida
 
 app.get("/", (req, res) => {
-   
+   res.json("Data för jobb");
 });
 
 // Routing - lista alla jobb
